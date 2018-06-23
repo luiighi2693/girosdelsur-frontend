@@ -2,18 +2,18 @@ import {Component, OnInit, Renderer} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  selector: 'app-restorepassword',
+  templateUrl: './restorepassword.component.html',
+  styles: []
 })
-export class SigninComponent implements OnInit {
+export class RestorepasswordComponent implements OnInit {
 
-  public genericErrorMessage = 'Campos Invalidos';
+  public genericErrorMessage = 'Campos invalidos';
   public errorMessage = this.genericErrorMessage;
-  public email: string;
   public password: string;
-  public isChecked = false;
+  public repeatPassword: string;
   public showValidFormMessage = false;
+  public validatePassword = false;
 
   constructor(private _route: ActivatedRoute,
               private _router: Router,
@@ -27,32 +27,24 @@ export class SigninComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    localStorage.removeItem('email');
+    localStorage.removeItem('username');
     localStorage.clear();
   }
 
   login() {
     if (!this.validateForm()) {
       this.showValidFormMessage = true;
+
+      if (this.password !== this.repeatPassword) {
+        this.errorMessage = 'Claves no coinciden';
+      }
     } else {
-      console.log('this.username: ' + this.email);
-      localStorage.setItem('email', this.email);
-      console.log(localStorage.getItem('username'));
-      this._router.navigate(['/main']);
+      this.showValidFormMessage = false;
+      this.validatePassword = true;
     }
   }
 
   validateForm() {
-    if (this.email === undefined) {
-      this.errorMessage = this.genericErrorMessage;
-      return false;
-    }
-
-    if (this.email.length === 0) {
-      this.errorMessage = this.genericErrorMessage;
-      return false;
-    }
-
     if (this.password === undefined) {
       this.errorMessage = this.genericErrorMessage;
       return false;
@@ -63,7 +55,12 @@ export class SigninComponent implements OnInit {
       return false;
     }
 
-    if (!this.isValidEmail(this.email)) {
+    if (this.repeatPassword === undefined) {
+      this.errorMessage = this.genericErrorMessage;
+      return false;
+    }
+
+    if (this.repeatPassword.length === 0) {
       this.errorMessage = this.genericErrorMessage;
       return false;
     }
@@ -75,10 +72,4 @@ export class SigninComponent implements OnInit {
 
     return true;
   }
-
-  isValidEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
-
 }

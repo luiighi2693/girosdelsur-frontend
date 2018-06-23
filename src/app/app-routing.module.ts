@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: './modules/login/login.module#LoginModule' },
   { path: 'signin', loadChildren: './modules/signin/signin.module#SigninModule' },
   { path: 'forgotpassword', loadChildren: './modules/forgotpassword/forgotpassword.module#ForgotpasswordModule' },
+  { path: 'restorepassword', loadChildren: './modules/restorepassword/restorepassword.module#RestorepasswordModule' },
   { path: '**', redirectTo: 'login', pathMatch: 'full'}
 ];
 
