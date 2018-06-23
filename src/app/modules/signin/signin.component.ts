@@ -1,15 +1,19 @@
 import {Component, OnInit, Renderer} from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styles: []
+  styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
 
-  public username: string;
+  public genericErrorMessage = 'Campos Invalidos';
+  public errorMessage = this.genericErrorMessage;
+  public email: string;
   public password: string;
+  public isChecked = false;
+  public showValidFormMessage = false;
 
   constructor(private _route: ActivatedRoute,
               private _router: Router,
@@ -23,14 +27,45 @@ export class SigninComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    localStorage.removeItem('username');
+    localStorage.removeItem('email');
     localStorage.clear();
   }
 
   login() {
-    console.log('this.username: ' + this.username);
-    localStorage.setItem('username', this.username);
-    console.log(localStorage.getItem('username'));
-    this._router.navigate(['/']);
+    if (!this.validateForm()) {
+      this.showValidFormMessage = true;
+      this.errorMessage = this.genericErrorMessage;
+    } else {
+      console.log('this.username: ' + this.email);
+      localStorage.setItem('email', this.email);
+      console.log(localStorage.getItem('username'));
+      this._router.navigate(['/main']);
+    }
   }
+
+  validateForm() {
+    if (this.email === undefined) {
+      return false;
+    }
+
+    if (this.email.length === 0) {
+      return false;
+    }
+
+    if (this.password === undefined) {
+      return false;
+    }
+
+    if (this.password.length === 0) {
+      return false;
+    }
+
+    return this.isValidEmail(this.email);
+  }
+
+  isValidEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
 }
