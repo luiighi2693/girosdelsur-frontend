@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('angular5-auth-demo App', () => {
+describe('app-girosdelsur App', () => {
   let page: AppPage;
 
   beforeEach(() => {
